@@ -88,7 +88,7 @@ from typing import Dict, List, Optional, Tuple
 import k2
 import torch
 import torch.nn as nn
-from asr_datamodule import AishellAsrDataModule
+from asr_datamodule import StutterAsrDataModule
 from beam_search import (
     beam_search,
     fast_beam_search_nbest,
@@ -600,7 +600,7 @@ def save_results(
 @torch.no_grad()
 def main():
     parser = get_parser()
-    AishellAsrDataModule.add_arguments(parser)
+    StutterAsrDataModule.add_arguments(parser)
     args = parser.parse_args()
     args.exp_dir = Path(args.exp_dir)
 
@@ -774,7 +774,7 @@ def main():
 
     # we need cut ids to display recognition results.
     args.return_cuts = True
-    aishell = AishellAsrDataModule(args)
+    stutter_speech = StutterAsrDataModule(args)
 
     def remove_short_utt(c: Cut):
         T = ((c.num_frames - 7) // 2 + 1) // 2
@@ -784,16 +784,12 @@ def main():
             )
         return T > 0
 
-    dev_cuts = aishell.valid_cuts()
-    dev_cuts = dev_cuts.filter(remove_short_utt)
-    dev_dl = aishell.valid_dataloaders(dev_cuts)
+    test_cuts = stutter_speech.test_cuts()
+    #test_cuts = test_cuts.filter(remove_short_utt)
+    test_dl = stutter_speech.test_dataloaders(test_cuts)
 
-    test_cuts = aishell.test_cuts()
-    test_cuts = test_cuts.filter(remove_short_utt)
-    test_dl = aishell.test_dataloaders(test_cuts)
-
-    test_sets = ["dev", "test"]
-    test_dls = [dev_dl, test_dl]
+    test_sets = ["test"]
+    test_dls = [test_dl]
 
     for test_set, test_dl in zip(test_sets, test_dls):
         results_dict = decode_dataset(

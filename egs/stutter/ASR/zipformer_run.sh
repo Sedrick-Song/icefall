@@ -6,7 +6,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 ./zipformer/train.py \
     --world-size 4 \
     --lang-dir data/lang_char_all \
-    --num-epochs 40 \
+    --num-epochs 60 \
     --start-epoch 1 \
     --exp-dir zipformer/exp_all_withoutmusan \
     --max-duration 300 \

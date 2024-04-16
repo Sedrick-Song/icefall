@@ -364,7 +364,7 @@ class StutterAsrDataModule:
     def train_cuts(self) -> CutSet:
         logging.info("About to get train cuts")
         cuts_train = load_manifest_lazy(
-            self.args.manifest_dir / "stutter_cuts_train_temp.jsonl.gz"
+            self.args.manifest_dir / "stutter_cuts_train.jsonl.gz"
         )
         return cuts_train
     
@@ -372,7 +372,7 @@ class StutterAsrDataModule:
     def train_all_cuts(self) -> CutSet:
         logging.info("About to get combined train cuts")
         stutter_train = load_manifest_lazy(
-            self.args.manifest_dir / "stutter_cuts_train_temp.jsonl.gz"
+            self.args.manifest_dir / "stutter_cuts_train.jsonl.gz"
         )
 
         aishell_train = load_manifest_lazy(
@@ -391,9 +391,9 @@ class StutterAsrDataModule:
     @lru_cache()
     def valid_cuts(self) -> CutSet:
         logging.info("About to get dev cuts")
-        return load_manifest_lazy(self.args.manifest_dir / "stutter_cuts_test_temp.jsonl.gz")
+        return load_manifest_lazy(self.args.manifest_dir / "stutter_cuts_dev.jsonl.gz")
 
     @lru_cache()
     def test_cuts(self) -> List[CutSet]:
         logging.info("About to get test cuts")
-        return load_manifest_lazy(self.args.manifest_dir / "stutter_cuts_test_temp.jsonl.gz")
+        return load_manifest_lazy(self.args.manifest_dir / "stutter_cuts_dev.jsonl.gz")
