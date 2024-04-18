@@ -239,6 +239,13 @@ def add_model_arguments(parser: argparse.ArgumentParser):
         chunk left-context frames will be chosen randomly from this list; else not relevant.""",
     )
 
+    parser.add_argument(
+        "--use-ctc",
+        type=str2bool,
+        default=False,
+        help="Whether to use ctc.",
+    )
+
 
 def get_parser():
     parser = argparse.ArgumentParser(
@@ -601,6 +608,7 @@ def get_model(params: AttributeDict) -> nn.Module:
         encoder_dim=int(max(params.encoder_dim.split(","))),
         decoder_dim=params.decoder_dim,
         vocab_size=params.vocab_size,
+        use_ctc=params.use_ctc,
     )
     return model
 
